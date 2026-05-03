@@ -1,0 +1,137 @@
+-- [[ MICKYFIXLAG - PREMIUM OPTIMIZATION WITH TOGGLE ICON ]] --
+
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local Title = Instance.new("TextLabel")
+local ScrollFrame = Instance.new("ScrollingFrame")
+local UIListLayout = Instance.new("UIListLayout")
+local OpenBtn = Instance.new("TextButton") -- Nút Icon mở Menu
+local UICorner_Icon = Instance.new("UICorner")
+
+-- 1. Cấu hình ScreenGui
+ScreenGui.Parent = game.CoreGui
+ScreenGui.Name = "MICKYFIXLAG_GUI"
+
+-- 2. Cấu hình Nút Icon (Bấm để ẩn/hiện)
+OpenBtn.Name = "MICKY_Icon"
+OpenBtn.Parent = ScreenGui
+OpenBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
+OpenBtn.Position = UDim2.new(0.02, 0, 0.4, 0) -- Vị trí bên trái màn hình
+OpenBtn.Size = UDim2.new(0, 50, 0, 50)
+OpenBtn.Text = "M" -- Chữ M đại diện cho MICKY
+OpenBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+OpenBtn.Font = Enum.Font.GothamBold
+OpenBtn.TextSize = 25
+OpenBtn.Active = true
+OpenBtn.Draggable = true -- Có thể kéo icon đi chỗ khác
+
+UICorner_Icon.CornerRadius = UDim.new(1, 0) -- Làm icon hình tròn
+UICorner_Icon.Parent = OpenBtn
+
+-- 3. Cấu hình Menu chính (MainFrame)
+MainFrame.Name = "MICKY_Main"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+MainFrame.BorderSizePixel = 2
+MainFrame.BorderColor3 = Color3.fromRGB(0, 255, 255) 
+MainFrame.Position = UDim2.new(0.3, 0, 0.2, 0)
+MainFrame.Size = UDim2.new(0, 230, 0, 350)
+MainFrame.Visible = false -- Mặc định ẩn, bấm icon mới hiện
+MainFrame.Active = true
+MainFrame.Draggable = true 
+
+-- Xử lý ẩn/hiện khi bấm vào Icon
+OpenBtn.MouseButton1Click:Connect(function()
+    MainFrame.Visible = not MainFrame.Visible
+end)
+
+-- 4. Tiêu đề và Nội dung Menu
+Title.Parent = MainFrame
+Title.Text = "MICKYFIXLAG"
+Title.Size = UDim2.new(1, 0, 0, 45)
+Title.TextColor3 = Color3.fromRGB(0, 255, 255)
+Title.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 20
+
+ScrollFrame.Parent = MainFrame
+ScrollFrame.Position = UDim2.new(0, 0, 0, 50)
+ScrollFrame.Size = UDim2.new(1, 0, 1, -55)
+ScrollFrame.BackgroundTransparency = 1
+ScrollFrame.CanvasSize = UDim2.new(0, 0, 1.8, 0)
+ScrollFrame.ScrollBarThickness = 4
+
+UIListLayout.Parent = ScrollFrame
+UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+UIListLayout.Padding = UDim.new(0, 10)
+
+local function CreateButton(name, color, callback)
+    local btn = Instance.new("TextButton")
+    btn.Parent = ScrollFrame
+    btn.Text = name
+    btn.Size = UDim2.new(0.85, 0, 0, 40)
+    btn.BackgroundColor3 = color
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Font = Enum.Font.SourceSansBold
+    btn.TextSize = 14
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = btn
+    btn.MouseButton1Click:Connect(callback)
+end
+
+-- ==========================================
+-- CÁC CHỨC NĂNG ĐÃ TỐI ƯU
+-- ==========================================
+CreateButton("XOÁ 80% ĐỒ HOẠ", Color3.fromRGB(45, 45, 150), function()
+    for _, v in pairs(game:GetDescendants()) do
+        if v:IsA("Part") or v:IsA("MeshPart") or v:IsA("UnionOperation") then
+            v.Material = Enum.Material.SmoothPlastic
+            v.CastShadow = false
+        elseif v:IsA("Decal") or v:IsA("Texture") then
+            v:Destroy()
+        end
+    end
+    sethiddenproperty(game.Workspace.Terrain, "Decoration", false)
+    game:GetService("Lighting").GlobalShadows = false
+    workspace.Terrain.WaterWaveSize = 0
+    workspace.Terrain.WaterWaveSpeed = 0
+end)
+
+CreateButton("XOÁ 95% HIỆU ỨNG SKILL", Color3.fromRGB(150, 45, 150), function()
+    for _, v in pairs(game:GetDescendants()) do
+        if v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Beam") or v:IsA("Explosion") then
+            v:Destroy()
+        end
+    end
+    game:GetService("RunService").Heartbeat:Connect(function()
+        for _, v in pairs(workspace:GetChildren()) do
+            if v.Name == "Skill" or v.Name == "Effect" or v.Name == "Attack" then
+                if not game.Players:GetPlayerFromCharacter(v) then
+                    v:Destroy()
+                end
+            end
+        end
+    end)
+end)
+
+CreateButton("BOOST RAM", Color3.fromRGB(45, 150, 45), function()
+    collectgarbage("collect")
+end)
+
+CreateButton("XOÁ SƯƠNG MÙ", Color3.fromRGB(150, 150, 45), function()
+    local Lighting = game:GetService("Lighting")
+    Lighting.FogEnd = 100000
+    for _, v in pairs(Lighting:GetChildren()) do
+        if v:IsA("PostProcessEffect") or v:IsA("Bloom") or v:IsA("SunRaysEffect") then
+            v:Destroy()
+        end
+    end
+    if workspace:FindFirstChild("Clouds") then workspace.Clouds:Destroy() end
+end)
+
+CreateButton("TẮT MENU & ICON", Color3.fromRGB(70, 70, 70), function()
+    ScreenGui:Destroy()
+end)
+
+print("MICKYFIXLAG Loaded! Bấm vào nút chữ M để mở menu.")
